@@ -20,24 +20,24 @@ file 'Gemfile', <<~RUBY
   gem 'webpacker'
 
   group :development do
-  gem 'annotate'
-  gem 'awesome_print'
-  gem 'better_errors'
-  gem 'binding_of_caller'
-  gem 'brakeman', require: false
-  gem 'bullet'
-  gem 'overcommit'
-  gem 'pry-byebug'
-  gem 'rails-erd'
-  gem 'rubocop', require: false
-  gem 'table_print'
-  gem 'web-console', '>= 3.3.0'
-  gem 'xray-rails'
+    gem 'annotate'
+    gem 'awesome_print'
+    gem 'better_errors'
+    gem 'binding_of_caller'
+    gem 'brakeman', require: false
+    gem 'bullet'
+    gem 'overcommit'
+    gem 'pry-byebug'
+    gem 'rails-erd'
+    gem 'rubocop', require: false
+    gem 'table_print'
+    gem 'web-console', '>= 3.3.0'
+    gem 'xray-rails'
   end
 
   group :development, :test do
-  gem 'listen', '~> 3.0.5'
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+    gem 'listen', '~> 3.0.5'
+    gem 'spring'
+    gem 'spring-watcher-listen', '~> 2.0.0'
   end
 RUBY
