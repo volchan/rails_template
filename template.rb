@@ -11,6 +11,7 @@ def apply_template!
   clean_gemfile
   ask_optional_gems
   install_optional_gems
+  apply 'app/template.rb'
 end
 
 def assert_minimum_rails_version
