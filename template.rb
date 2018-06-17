@@ -45,6 +45,7 @@ def ask_optional_gems
   @devise = yes?('Do you want to implement authentication in your app with the Devise gem? (y/n)')
   @pundit = yes?('Do you want to manage authorizations with Pundit? (y/n)') if @devise
   @haml = yes?('Do you want to use Haml instead of EBR? (y/n)')
+  @babel = yes?('Do you want to use ES6 outside of webpack ? (y/n)')
   @github = yes?('Do you want to push your project to Github? (y/n)')
 end
 
@@ -52,6 +53,7 @@ def install_optional_gems
   add_devise if @devise
   add_pundit if @pundit
   add_haml if @haml
+  add_babel if @babel
 end
 
 def add_devise
@@ -66,6 +68,10 @@ end
 def add_haml
   insert_into_file 'Gemfile', "gem 'haml'\n", after: /'font-awesome-sass', '~> 5.0.9'\n/
   insert_into_file 'Gemfile', "gem 'haml-rails', git: 'git://github.com/indirect/haml-rails.git'\n", after: /'haml'\n/
+end
+
+def add_babel
+  insert_into_file 'Gemfile', "gem 'babel-transpiler'\n", after: /'autoprefixer-rails'\n/
 end
 
 run 'pgrep spring | xargs kill -9'
