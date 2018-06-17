@@ -38,7 +38,7 @@ def add_template_repository_to_source_path
 end
 
 def clean_gemfile
-  apply './gemfile.rb'
+  template 'Gemfile.tt', force: true
 end
 
 def ask_optional_gems
