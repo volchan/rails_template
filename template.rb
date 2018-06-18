@@ -19,9 +19,23 @@ def assert_minimum_rails_version
   rails_version = Gem::Version.new(Rails::VERSION::STRING)
   return if requirement.satisfied_by?(rails_version)
 
+  ask_to_continue
+end
+
+def ask_to_continue
   prompt = "This template requires Rails #{RAILS_REQUIREMENT}. "\
-           "You are using #{rails_version}. Continue anyway? (y/n)"
-  exit 1 if no?(prompt)
+           "You are using #{rails_version}. continue, update or quit ? (c/u/q)"
+  res = ask?(prompt).downcase
+
+  return if %(c continue).include?(res)
+  return update_rails if %(u update).include?(res)
+  return exit 1 if %(q quit exit).include?(res)
+  puts 'I did not understand your answer sorry.'
+  ask_to_continue
+end
+
+def update_rails
+  run 'gem update rails'
 end
 
 def add_template_repository_to_source_path
