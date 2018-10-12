@@ -13,7 +13,7 @@ def mailer_config
   "config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }"
 end
 
-copy_file 'config/sidekiq.yml'
-copy_file 'config/initializers/redis.rb'
-environment mailer_config, env: 'development'
+copy_file 'config/sidekiq.yml' if @sidekiq
+copy_file 'config/initializers/redis.rb' if @sidekiq
+environment mailer_config, env: 'development' if @devise
 environment bullet_config, env: 'development'
