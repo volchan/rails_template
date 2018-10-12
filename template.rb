@@ -68,6 +68,7 @@ def ask_optional_gems
   @sidekiq = yes?('Do you want to use redis and sidekiq for background jobs? (y/n)')
   @haml = yes?('Do you want to use Haml instead of EBR? (y/n)')
   @github = yes?('Do you want to push your project to Github? (y/n)')
+  @hub = yes?('Do you have the hub cli? (y/n)')
 end
 
 def install_optional_gems
@@ -98,7 +99,6 @@ def add_haml
 end
 
 def initial_commit
-  git :init
   git add: '.'
   git commit: %( -m 'Initial commit' )
 end
