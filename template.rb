@@ -13,7 +13,10 @@ def apply_template!
   install_optional_gems
   apply 'config/template.rb'
   apply 'app/template.rb'
-  initial_commit
+  after_bundle do
+    run_gem_setups
+    initial_commit
+  end
 end
 
 def assert_minimum_rails_version
@@ -110,6 +113,3 @@ end
 
 run 'pgrep spring | xargs kill -9'
 apply_template!
-after_bundle do
-  run_gem_setups
-end
