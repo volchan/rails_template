@@ -1,7 +1,6 @@
 require 'fileutils'
 require 'shellwords'
 require 'tmpdir'
-require 'pry-byebug'
 
 RAILS_REQUIREMENT = '>= 5.2.1'.freeze
 
@@ -67,7 +66,7 @@ def ask_optional_gems
   @devise = yes?('Do you want to implement authentication in your app with the Devise gem? (y/n)')
   @pundit = yes?('Do you want to manage authorizations with Pundit? (y/n)')
   @sidekiq = yes?('Do you want to use redis and sidekiq for background jobs? (y/n)')
-  @haml = yes?('Do you want to use Haml instead of EBR? (y/n)')
+  @haml = yes?('Do you want to use Haml instead of ERB? (y/n)')
   @github = yes?('Do you want to push your project to Github? (y/n)')
   @hub = yes?('Do you have the hub cli? (y/n)')
 end
