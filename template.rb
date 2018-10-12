@@ -13,6 +13,7 @@ def apply_template!
   install_optional_gems
   apply 'config/template.rb'
   apply 'app/template.rb'
+  initial_commit
 end
 
 def assert_minimum_rails_version
@@ -85,12 +86,17 @@ end
 def add_sidekiq
   insert_into_file 'Gemfile', "gem 'sidekiq'\n", after: /'sass-rails'\n/
   insert_into_file 'Gemfile', "gem 'sidekiq-failures', '~> 1.0'\n", after: /'sidekiq'\n/
-  insert_into_file 'Gemfile', "gem 'sidekiq-status'\n", after: /'sidekiq-status'\n/
+  insert_into_file 'Gemfile', "gem 'sidekiq-status'\n", after: /gem 'sidekiq-failures', '~> 1.0'\n/
 end
 
 def add_haml
   insert_into_file 'Gemfile', "gem 'haml'\n", after: /'font-awesome-sass', '~> 5.0.9'\n/
   insert_into_file 'Gemfile', "gem 'haml-rails', git: 'git://github.com/indirect/haml-rails.git'\n", after: /'haml'\n/
+end
+
+def initial_commit
+  git add: '.'
+  git commit: "-m 'Initial commit'"
 end
 
 run 'pgrep spring | xargs kill -9'
