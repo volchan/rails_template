@@ -25,10 +25,10 @@ def assert_minimum_rails_version
   rails_version = Gem::Version.new(Rails::VERSION::STRING)
   return if requirement.satisfied_by?(rails_version)
 
-  ask_to_continue
+  ask_to_continue(rails_version)
 end
 
-def ask_to_continue
+def ask_to_continue(rails_version)
   prompt = "This template requires Rails #{RAILS_REQUIREMENT}. "\
            "You are using #{rails_version}. continue, update or quit ? (c/u/q)"
   res = ask?(prompt).downcase
