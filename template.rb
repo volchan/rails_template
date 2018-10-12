@@ -1,7 +1,6 @@
 require 'fileutils'
 require 'shellwords'
 require 'tmpdir'
-require 'pry-byebug'
 
 RAILS_REQUIREMENT = '>= 5.2.1'.freeze
 
@@ -15,6 +14,7 @@ def apply_template!
   apply 'app/template.rb'
   after_bundle do
     run_gem_setups
+    js_setup
     initial_commit
   end
 end
@@ -24,10 +24,10 @@ def assert_minimum_rails_version
   rails_version = Gem::Version.new(Rails::VERSION::STRING)
   return if requirement.satisfied_by?(rails_version)
 
-  ask_to_continue
+  ask_to_continue(rails_version)
 end
 
-def ask_to_continue
+def ask_to_continue(rails_version)
   prompt = "This template requires Rails #{RAILS_REQUIREMENT}. "\
            "You are using #{rails_version}. continue, update or quit ? (c/u/q)"
   res = ask?(prompt).downcase
@@ -66,7 +66,7 @@ def ask_optional_gems
   @devise = yes?('Do you want to implement authentication in your app with the Devise gem? (y/n)')
   @pundit = yes?('Do you want to manage authorizations with Pundit? (y/n)')
   @sidekiq = yes?('Do you want to use redis and sidekiq for background jobs? (y/n)')
-  @haml = yes?('Do you want to use Haml instead of EBR? (y/n)')
+  @haml = yes?('Do you want to use Haml instead of ERB? (y/n)')
   @github = yes?('Do you want to push your project to Github? (y/n)')
   @hub = yes?('Do you have the hub cli? (y/n)')
 end
@@ -108,7 +108,13 @@ def run_gem_setups
   run 'rails generate devise user' if @devise
   run 'rails generate simple_form:install --bootstrap'
   run 'rails g devise:i18n:views' if @devise
-  run 'rake haml:erb2haml' if @haml
+  run 'HAML_RAILS_DELETE_ERB=true rake haml:erb2haml' if @haml
+  copy_file '.rubocop.yml'
+  copy_file '.overcommit.yml'
+end
+
+def js_setup
+  run 'yarn add --dev babel-eslint eslint eslint-config-airbnb-base eslint-config-prettier eslint-import-resolver-webpack eslint-plugin-import eslint-plugin-prettier lint-staged prettier stylelint stylelint-config-standard' if File.exist?('package.json')
 end
 
 run 'pgrep spring | xargs kill -9'
