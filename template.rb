@@ -95,8 +95,11 @@ def add_haml
 end
 
 def initial_commit
-  git add: '.'
-  git commit: "-m 'Initial commit'"
+  after_bundle do
+    git :init
+    git add: '.'
+    git commit: %( -m 'Initial commit' )
+  end
 end
 
 run 'pgrep spring | xargs kill -9'
