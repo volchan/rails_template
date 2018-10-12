@@ -36,7 +36,7 @@ def ask_to_continue(rails_version)
   return update_rails if %(u update).include?(res)
   return exit 1 if %(q quit exit).include?(res)
 
-  puts 'I did not understand your answer sorry.'
+  puts 'I did\'t understand your answer sorry.'
   ask_to_continue
 end
 
@@ -68,7 +68,6 @@ def ask_optional_gems
   @sidekiq = yes?('Do you want to use redis and sidekiq for background jobs? (y/n)')
   @haml = yes?('Do you want to use Haml instead of ERB? (y/n)')
   @github = yes?('Do you want to push your project to Github? (y/n)')
-  @hub = yes?('Do you have the hub cli? (y/n)')
 end
 
 def install_optional_gems
