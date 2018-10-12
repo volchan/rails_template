@@ -105,7 +105,7 @@ end
 
 def run_gem_setups
   run 'rails generate devise:install' if @devise
-  run 'rails generate devise user' if @devise
+  run 'rails generate devise User' if @devise
   run 'rails generate simple_form:install --bootstrap'
   run 'rails g devise:i18n:views' if @devise
   run 'HAML_RAILS_DELETE_ERB=true rake haml:erb2haml' if @haml
