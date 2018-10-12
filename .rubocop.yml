@@ -1,0 +1,22 @@
+AllCops:
+  Include:
+    - Rakefile
+    - config.ru
+  Exclude:
+    - 'vendor/**/*'
+    - 'Gemfile'
+    - 'db/**/*'
+    - 'db/migrate/**'
+    - 'config/**/*'
+    - 'config/environnements/**'
+    - 'bin/**/*'
+    - 'tmp/*'
+    - 'Guardfile'
+    - 'Gemfile'
+    - 'node_modules/**/*' #webpacker & rails 5.1
+Rails:
+  Enabled: true
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Documentation:
+  Enabled: false

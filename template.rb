@@ -15,6 +15,7 @@ def apply_template!
   apply 'app/template.rb'
   after_bundle do
     run_gem_setups
+    js_setup
     initial_commit
   end
 end
@@ -94,7 +95,7 @@ def add_sidekiq
 end
 
 def add_haml
-  insert_into_file 'Gemfile', "gem 'haml'\n", after: /'font-awesome-sass', '~> 5.0.9'\n/
+  insert_into_file 'Gemfile', "gem 'haml', '~> 1.0'\n", after: /'font-awesome-sass', '~> 5.0.9'\n/
   insert_into_file 'Gemfile', "gem 'haml-rails', git: 'git://github.com/indirect/haml-rails.git'\n", after: /'haml'\n/
 end
 
@@ -108,7 +109,13 @@ def run_gem_setups
   run 'rails generate devise user' if @devise
   run 'rails generate simple_form:install --bootstrap'
   run 'rails g devise:i18n:views' if @devise
-  run 'rake haml:erb2haml' if @haml
+  run 'HAML_RAILS_DELETE_ERB=true rake haml:erb2haml' if @haml
+  copy_file '.rubocop.yml'
+  copy_file '.overcommit.yml'
+end
+
+def js_setup
+  run 'yarn add --dev babel-eslint eslint eslint-config-airbnb-base eslint-config-prettier eslint-import-resolver-webpack eslint-plugin-import eslint-plugin-prettier lint-staged prettier stylelint stylelint-config-standard' if File.exist?('package.json')
 end
 
 run 'pgrep spring | xargs kill -9'
