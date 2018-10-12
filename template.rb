@@ -3,7 +3,7 @@ require 'shellwords'
 require 'tmpdir'
 require 'pry-byebug'
 
-RAILS_REQUIREMENT = '>= 5.2.0'.freeze
+RAILS_REQUIREMENT = '>= 5.2.1'.freeze
 
 def apply_template!
   assert_minimum_rails_version
@@ -11,6 +11,7 @@ def apply_template!
   clean_gemfile
   ask_optional_gems
   install_optional_gems
+  apply 'config/template.rb'
   apply 'app/template.rb'
 end
 
@@ -30,6 +31,7 @@ def ask_to_continue
   return if %(c continue).include?(res)
   return update_rails if %(u update).include?(res)
   return exit 1 if %(q quit exit).include?(res)
+
   puts 'I did not understand your answer sorry.'
   ask_to_continue
 end
@@ -58,21 +60,21 @@ end
 
 def ask_optional_gems
   @devise = yes?('Do you want to implement authentication in your app with the Devise gem? (y/n)')
-  @pundit = yes?('Do you want to manage authorizations with Pundit? (y/n)') if @devise
+  @pundit = yes?('Do you want to manage authorizations with Pundit? (y/n)')
+  @sidekiq = yes?('Do you want to use redis and sidekiq for background jobs? (y/n)')
   @haml = yes?('Do you want to use Haml instead of EBR? (y/n)')
-  @babel = yes?('Do you want to use ES6 outside of webpack ? (y/n)')
   @github = yes?('Do you want to push your project to Github? (y/n)')
 end
 
 def install_optional_gems
   add_devise if @devise
   add_pundit if @pundit
+  add_sidekiq if @sidekiq
   add_haml if @haml
-  add_babel if @babel
 end
 
 def add_devise
-  insert_into_file 'Gemfile', "gem 'devise'\n", after: /'bootstrap'\n/
+  insert_into_file 'Gemfile', "gem 'devise'\n", after: /'country_select'\n/
   insert_into_file 'Gemfile', "gem 'devise-i18n'\n", after: /'devise'\n/
 end
 
@@ -80,13 +82,15 @@ def add_pundit
   insert_into_file 'Gemfile', "gem 'pundit'\n", after: /'puma'\n/
 end
 
+def add_sidekiq
+  insert_into_file 'Gemfile', "gem 'sidekiq'\n", after: /'sass-rails'\n/
+  insert_into_file 'Gemfile', "gem 'sidekiq-failures', '~> 1.0'\n", after: /'sidekiq'\n/
+  insert_into_file 'Gemfile', "gem 'sidekiq-status'\n", after: /'sidekiq-status'\n/
+end
+
 def add_haml
   insert_into_file 'Gemfile', "gem 'haml'\n", after: /'font-awesome-sass', '~> 5.0.9'\n/
   insert_into_file 'Gemfile', "gem 'haml-rails', git: 'git://github.com/indirect/haml-rails.git'\n", after: /'haml'\n/
-end
-
-def add_babel
-  insert_into_file 'Gemfile', "gem 'babel-transpiler'\n", after: /'autoprefixer-rails'\n/
 end
 
 run 'pgrep spring | xargs kill -9'
