@@ -95,7 +95,7 @@ end
 
 def add_haml
   insert_into_file 'Gemfile', "gem 'haml'\n", after: /'font-awesome-sass', '~> 5.0.9'\n/
-  insert_into_file 'Gemfile', "gem 'haml-rails', git: 'git://github.com/indirect/haml-rails.git'\n", after: /'haml'\n/
+  insert_into_file 'Gemfile', "gem 'haml-rails', '~> 1.0'\n", after: /'haml'\n/
 end
 
 def initial_commit
