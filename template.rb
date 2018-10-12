@@ -95,12 +95,21 @@ def add_haml
 end
 
 def initial_commit
-  after_bundle do
-    git :init
-    git add: '.'
-    git commit: %( -m 'Initial commit' )
-  end
+  git :init
+  git add: '.'
+  git commit: %( -m 'Initial commit' )
+end
+
+def run_gem_setups
+  run 'rails generate devise:install' if @devise
+  run 'rails generate devise user' if @devise
+  run 'rails generate simple_form:install --bootstrap'
+  run 'rails g devise:i18n:views' if @devise
+  run 'rake haml:erb2haml' if @haml
 end
 
 run 'pgrep spring | xargs kill -9'
 apply_template!
+after_bundle do
+  run_gem_setups
+end
