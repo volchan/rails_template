@@ -18,7 +18,7 @@ def apply_template!
     setup_gems
     js_setup
     setup_overcommit
-    run 'bundle binstubs bundler --force'
+    setup_active_storage if @storage
     run 'rails db:create db:migrate'
     copy_file 'Rakefile', force: true
     template 'README.md.tt', force: true
@@ -69,6 +69,10 @@ def add_template_repository_to_source_path
       'https://github.com/volchan/rails_template',
       tempdir
     ].map(&:shellescape).join(' ')
+
+    if (branch = __FILE__[%r{rails_template/(.+)/template.rb}, 1])
+      Dir.chdir(tempdir) { git checkout: branch }
+    end
   else
     source_paths.unshift(File.dirname(__FILE__))
   end
@@ -79,14 +83,19 @@ def clean_gemfile
 end
 
 def ask_optional_gems
-  @pundit = yes?('Do you want to manage authorizations with Pundit? (y/n)')
-  @haml = yes?('Do you want to use Haml instead of ERB? (y/n)')
-  @github = yes?('Do you want to push your project to Github? (y/n)')
+  @pundit = yes?('Do you want to manage authorizations with Pundit? (y/n)', :green)
+  @haml = yes?('Do you want to use Haml instead of ERB? (y/n)', :green)
+  @storage = yes?('Do you want to use ActiveStorage? (y/n)', :green)
+  @aws = yes?('Do you want to use amazon S3 with ActiveStorage? (y/n)', :green) if @storage
+  @cloudinary = yes?('Do you want to use cloudinary with ActiveStorage? (y/n)', :green) unless @aws
+  @github = yes?('Do you want to push your project to Github? (y/n)', :green)
 end
 
 def add_optional_gems
   add_pundit if @pundit
   add_haml if @haml
+  add_aws if @aws
+  add_cloudinary if @cloudinary
 end
 
 def add_pundit
@@ -96,6 +105,15 @@ end
 def add_haml
   insert_into_file 'Gemfile', "gem 'haml'\n", after: /'font-awesome-sass', '~> 5.3.1'\n/
   insert_into_file 'Gemfile', "gem 'haml-rails', '~> 1.0'\n", after: /'haml'\n/
+end
+
+def add_aws
+  insert_into_file 'Gemfile', "gem 'aws-sdk-s3'\n", after: /'autoprefixer-rails'\n/
+end
+
+def add_cloudinary
+  insert_into_file 'Gemfile', "gem 'cloudinary', require: false\n", before: /gem 'country_select'\n/
+  insert_into_file 'Gemfile', "gem 'activestorage-cloudinary-service'\n", before: /gem 'autoprefixer-rails'\n/
 end
 
 def initial_commit
@@ -127,7 +145,6 @@ end
 
 def setup_annotate
   run 'rails g annotate:install'
-  run 'bundle binstubs annotate'
 end
 
 def setup_erd
@@ -136,16 +153,13 @@ def setup_erd
 end
 
 def setup_sidekiq
-  run 'bundle binstubs sidekiq'
 end
 
 def setup_rubocop
-  run 'bundle binstubs rubocop'
   copy_file '.rubocop.yml'
 end
 
 def setup_brakeman
-  run 'bundle binstubs brakeman'
 end
 
 def setup_devise
@@ -212,6 +226,43 @@ def setup_overcommit
   run 'overcommit --install'
   copy_file '.overcommit.yml', force: true
   run 'overcommit --sign'
+end
+
+def setup_active_storage
+  run 'rails active_storage:install'
+  copy_file 'config/storage.yml', force: true
+  aws_config if @aws
+  cloudinary_config if @cloudinary
+end
+
+def aws_config
+  gsub_file 'config/environments/production.rb', /config.active_storage.service = :local/, 'config.active_storage.service = :amazon'
+  insert_into_file 'config/storage.yml', after: '  root: <%= Rails.root.join("storage") %>' do
+    <<-YML
+\n
+amazon:
+  service: S3
+  access_key_id: <%= 'Your amazon S3 access_key_id goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
+  secret_access_key: <%= 'Your amazon S3 secret_access_key goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
+  region: Your amazon S3 bucket region goes here!
+  bucket: Your amazon S3 bucket name goes here!
+    YML
+  end
+end
+
+def cloudinary_config
+  gsub_file 'config/environments/production.rb', /config.active_storage.service = :local/, 'config.active_storage.service = :cloudinary'
+  insert_into_file 'config/storage.yml', after: '  root: <%= Rails.root.join("storage") %>' do
+    <<-YML
+\n
+cloudinary:
+  service: Cloudinary
+  cloud_name: <%= 'Your Cloudinary cloud name goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
+  api_key: <%= 'Your Cloudinary api key goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
+  api_secret: <%= 'Your Cloudinary api secret goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
+    YML
+  end
+
 end
 
 run 'pgrep spring | xargs kill -9'
