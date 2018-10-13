@@ -6,6 +6,7 @@ RAILS_REQUIREMENT = '>= 5.2.1'.freeze
 
 def apply_template!
   assert_minimum_rails_version
+  assert_pg
   add_template_repository_to_source_path
   clean_gemfile
   ask_optional_gems
@@ -32,6 +33,13 @@ def assert_minimum_rails_version
 
   # ask_to_continue(rails_version)
   puts "Please install rails #{RAILS_REQUIREMENT}!"
+end
+
+def assert_pg
+  return if options['database'] == 'postgresql'
+
+  puts 'Please add "-d postgresql" as an option!'
+  exit 1
 end
 
 # def ask_to_continue(rails_version)
@@ -70,11 +78,6 @@ def clean_gemfile
 end
 
 def ask_optional_gems
-  puts options
-  puts options
-  puts options
-  puts options
-  puts options
   @pundit = yes?('Do you want to manage authorizations with Pundit? (y/n)')
   @haml = yes?('Do you want to use Haml instead of ERB? (y/n)')
   @github = yes?('Do you want to push your project to Github? (y/n)')
@@ -100,6 +103,8 @@ def initial_commit
 end
 
 def js_setup
+  return unless options['webpack']
+
   run 'yarn add --dev babel-eslint eslint eslint-config-airbnb-base eslint-config-prettier eslint-import-resolver-webpack eslint-plugin-import eslint-plugin-prettier lint-staged prettier stylelint stylelint-config-standard' if File.exist?('package.json')
   copy_file '.eslintrc'
   copy_file '.eslintignore'
