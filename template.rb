@@ -71,12 +71,6 @@ def add_template_repository_to_source_path
     ].map(&:shellescape).join(' ')
 
     if (branch = __FILE__[%r{rails_template/(.+)/template.rb}, 1])
-      puts branch
-      puts branch
-      puts branch
-      puts branch
-      puts branch
-      puts branch
       Dir.chdir(tempdir) { git checkout: branch }
     end
   else
@@ -89,10 +83,10 @@ def clean_gemfile
 end
 
 def ask_optional_gems
-  puts options
-  @pundit = yes?('Do you want to manage authorizations with Pundit? (y/n)')
-  @haml = yes?('Do you want to use Haml instead of ERB? (y/n)')
-  @github = yes?('Do you want to push your project to Github? (y/n)')
+  @pundit = yes?('Do you want to manage authorizations with Pundit? (y/n)', :blue)
+  @haml = yes?('Do you want to use Haml instead of ERB? (y/n)', :blue)
+  @storage = yes?('Do you want to use ActiveStorage?(y/n)', :blue)
+  @github = yes?('Do you want to push your project to Github? (y/n)', :blue)
 end
 
 def add_optional_gems
