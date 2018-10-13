@@ -19,6 +19,7 @@ def apply_template!
     setup_overcommit
     run 'bundle binstubs bundler --force'
     run 'rails db:create db:migrate'
+    copy_file 'Rakefile', force: true
     initial_commit
     push_github if @github
   end
@@ -138,16 +139,17 @@ def setup_brakeman
 end
 
 def setup_devise
+  copy_file 'config/routes.rb', force: true
   run 'rails g devise:install'
   run 'rails g devise:i18n:views'
-  insert_into_file 'config/routes.rb', after: /draw do\n/ do
-    <<~RUBY
-      require 'sidekiq/web'
-      require 'sidekiq-status/web'
+  insert_into_file 'config/routes.rb', before: "  scope '(:locale)', locale: /fr/ do" do
+    <<-RUBY
+  require 'sidekiq/web'
+  require 'sidekiq-status/web'
 
-      authenticate :user, lambda { |u| u.admin } do
-        mount Sidekiq::Web => '/sidekiq'
-      end
+  authenticate :user, lambda { |u| u.admin } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
     RUBY
   end
   insert_into_file 'config/initializers/devise.rb', "  config.secret_key = Rails.application.credentials.secret_key_base\n", before: /^end/

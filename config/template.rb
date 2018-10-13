@@ -27,5 +27,3 @@ copy_file 'config/locales/views/fr.yml'
 
 environment mailer_config, env: 'development'
 environment bullet_config, env: 'development'
-
-copy_file 'config/routes.rb', force: true
