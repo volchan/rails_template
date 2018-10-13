@@ -239,13 +239,13 @@ def aws_config
   gsub_file 'config/environments/production.rb', /config.active_storage.service = :local/, 'config.active_storage.service = :amazon'
   insert_into_file 'config/storage.yml', after: '  root: <%= Rails.root.join("storage") %>' do
     <<-YML
-
-  amazon:
-    service: S3
-    access_key_id: <%= 'Your amazon S3 access_key_id goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
-    secret_access_key: <%= 'Your amazon S3 secret_access_key goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
-    region: Your amazon S3 bucket region goes here!
-    bucket: Your amazon S3 bucket name goes here!
+\n
+amazon:
+  service: S3
+  access_key_id: <%= 'Your amazon S3 access_key_id goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
+  secret_access_key: <%= 'Your amazon S3 secret_access_key goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
+  region: Your amazon S3 bucket region goes here!
+  bucket: Your amazon S3 bucket name goes here!
     YML
   end
 end
@@ -254,12 +254,12 @@ def cloudinary_config
   gsub_file 'config/environments/production.rb', /config.active_storage.service = :local/, 'config.active_storage.service = :cloudinary'
   insert_into_file 'config/storage.yml', after: '  root: <%= Rails.root.join("storage") %>' do
     <<-YML
-
-  cloudinary:
-    service: Cloudinary
-    cloud_name: <%= 'Your Cloudinary cloud name goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
-    api_key: <%= 'Your Cloudinary api key goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
-    api_secret: <%= 'Your Cloudinary api secret goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
+\n
+cloudinary:
+  service: Cloudinary
+  cloud_name: <%= 'Your Cloudinary cloud name goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
+  api_key: <%= 'Your Cloudinary api key goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
+  api_secret: <%= 'Your Cloudinary api secret goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
     YML
   end
 
