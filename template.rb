@@ -18,7 +18,6 @@ def apply_template!
     setup_gems
     js_setup
     setup_overcommit
-    run 'bundle binstubs bundler --force'
     run 'rails db:create db:migrate'
     copy_file 'Rakefile', force: true
     template 'README.md.tt', force: true
@@ -145,7 +144,6 @@ end
 
 def setup_annotate
   run 'rails g annotate:install'
-  run 'bundle binstubs annotate'
 end
 
 def setup_erd
@@ -154,16 +152,13 @@ def setup_erd
 end
 
 def setup_sidekiq
-  run 'bundle binstubs sidekiq'
 end
 
 def setup_rubocop
-  run 'bundle binstubs rubocop'
   copy_file '.rubocop.yml'
 end
 
 def setup_brakeman
-  run 'bundle binstubs brakeman'
 end
 
 def setup_devise
