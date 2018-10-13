@@ -70,6 +70,11 @@ def clean_gemfile
 end
 
 def ask_optional_gems
+  puts options
+  puts options
+  puts options
+  puts options
+  puts options
   @pundit = yes?('Do you want to manage authorizations with Pundit? (y/n)')
   @haml = yes?('Do you want to use Haml instead of ERB? (y/n)')
   @github = yes?('Do you want to push your project to Github? (y/n)')
@@ -139,8 +144,7 @@ def setup_brakeman
 end
 
 def setup_devise
-  remove_file 'config/routes.rb'
-  copy_file 'config/routes.rb'
+  copy_file 'config/routes.rb', force: true
   run 'rails g devise:install'
   run 'rails g devise:i18n:views'
   insert_into_file 'config/routes.rb', before: '  devise_for :users' do
