@@ -237,7 +237,7 @@ end
 
 def aws_config
   gsub_file 'config/environments/production.rb', /config.active_storage.service = :local/, 'config.active_storage.service = :amazon'
-  insert_into_file 'config/storage.yml', after: /  root: <%= Rails.root.join("storage") %>/ do
+  insert_into_file 'config/storage.yml', after: '  root: <%= Rails.root.join("storage") %>' do
     <<~YAML
 
       amazon:
@@ -252,7 +252,7 @@ end
 
 def cloudinary_config
   gsub_file 'config/environments/production.rb', /config.active_storage.service = :local/, 'config.active_storage.service = :cloudinary'
-  insert_into_file 'config/storage.yml', after: /  root: <%= Rails.root.join("storage") %>/ do
+  insert_into_file 'config/storage.yml', after: '  root: <%= Rails.root.join("storage") %>' do
     <<~YAML
 
       cloudinary:
