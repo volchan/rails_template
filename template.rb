@@ -62,13 +62,18 @@ end
 
 def add_template_repository_to_source_path
   if __FILE__ =~ %r{\Ahttps?://}
-    source_paths.unshift(tempdir = Dir.mktmpdir('rails-template-'))
+    require "tmpdir"
+    source_paths.unshift(tempdir = Dir.mktmpdir("rails-template-"))
     at_exit { FileUtils.remove_entry(tempdir) }
     git clone: [
-      '--quiet',
-      'https://github.com/volchan/rails_template',
+      "--quiet",
+      "https://github.com/mattbrictson/rails-template.git",
       tempdir
-    ].map(&:shellescape).join(' ')
+    ].map(&:shellescape).join(" ")
+
+    if (branch = __FILE__[%r{rails-template/(.+)/template.rb}, 1])
+      Dir.chdir(tempdir) { git checkout: branch }
+    end
   else
     source_paths.unshift(File.dirname(__FILE__))
   end
@@ -79,6 +84,7 @@ def clean_gemfile
 end
 
 def ask_optional_gems
+  puts options
   @pundit = yes?('Do you want to manage authorizations with Pundit? (y/n)')
   @haml = yes?('Do you want to use Haml instead of ERB? (y/n)')
   @github = yes?('Do you want to push your project to Github? (y/n)')

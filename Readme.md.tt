@@ -1,4 +1,3 @@
 # <%= app_name %>
 
-This is a Rails <%= Rails::VERSION::MAJOR %> app created using [Volchan's rails template][].
-[modern-rails-template]: https://github.com/volchan/rails_template
+This is a Rails <%= Rails::VERSION::MAJOR %> app created using [https://github.com/volchan/rails_template][Volchan's rails template].
