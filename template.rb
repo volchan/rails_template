@@ -16,9 +16,11 @@ def apply_template!
   after_bundle do
     setup_gems
     js_setup
+    setup_overcommit
+    run 'bundle binstubs bundler --force'
+    run 'rails db:create db:migrate'
     initial_commit
     push_github if @github
-    setup_overcommit
   end
 end
 
@@ -186,15 +188,10 @@ def setup_haml
 end
 
 def push_github
-  @hub = run 'brew ls --versions hub'
-  if @hub
-    run 'hub create'
-    run 'git push origin master'
-    run 'git push origin develop'
-    run 'hub browse'
-  else
-    puts 'You first need to install the hub command line tool'
-  end
+  run 'hub create'
+  run 'git push origin master'
+  run 'git push origin develop'
+  run 'hub browse'
 end
 
 def setup_overcommit
