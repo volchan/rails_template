@@ -18,6 +18,7 @@ def apply_template!
     setup_gems
     js_setup
     setup_overcommit
+    setup_active_storage if @storage
     run 'rails db:create db:migrate'
     copy_file 'Rakefile', force: true
     template 'README.md.tt', force: true
@@ -225,6 +226,43 @@ def setup_overcommit
   run 'overcommit --install'
   copy_file '.overcommit.yml', force: true
   run 'overcommit --sign'
+end
+
+def setup_active_storage
+  run 'rails active_storage:install'
+  copy_file 'config/storage.yml', force: true
+  aws_config if @aws
+  cloudinary_config if @cloudinary
+end
+
+def aws_config
+  gsub_file 'README', /config.active_storage.service = :local/, 'config.active_storage.service = :amazon'
+  insert_into_file 'config/storage.yml', after: /  root: <%= Rails.root.join("storage") %>/ do
+    <<~YAML
+    
+      amazon:
+        service: S3
+        access_key_id: <%= 'Your amazon S3 access_key_id goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
+        secret_access_key: <%= 'Your amazon S3 secret_access_key goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
+        region: Your amazon S3 bucket region goes here!
+        bucket: Your amazon S3 bucket name goes here!
+    YAML
+  end
+end
+
+def cloudinary_config
+  gsub_file 'README', /config.active_storage.service = :local/, 'config.active_storage.service = :cloudinary'
+  insert_into_file 'config/storage.yml', after: /  root: <%= Rails.root.join("storage") %>/ do
+    <<~YAML
+
+      cloudinary:
+        service: Cloudinary
+        cloud_name: <%= 'Your Cloudinary cloud name goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
+        api_key: <%= 'Your Cloudinary api key goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
+        api_secret: <%= 'Your Cloudinary api secret goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
+    YAML
+  end
+
 end
 
 run 'pgrep spring | xargs kill -9'
