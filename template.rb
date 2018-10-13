@@ -15,9 +15,9 @@ def apply_template!
   apply 'app/template.rb'
   copy_file 'Procfile'
   after_bundle do
-    # setup_gems
+    setup_gems
     js_setup
-    # setup_overcommit
+    setup_overcommit
     setup_active_storage if @storage
     run 'rails db:create db:migrate'
     copy_file 'Rakefile', force: true

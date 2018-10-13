@@ -82,8 +82,10 @@ Below is an extract of what this generator does. You can check all the features 
 
 When you launch a new rails app with the template, a few questions will be asked. Answer 'y' or 'yes' to unable the given option.
 
-* If you also need authorization, [pundit][] can be added and configured too.
+* If need authorization, [pundit][] can be added and configured too.
 * You can choose to use [Haml][] instead of `erb`.
+* You can choose to use [ActiveStorage][].
+* You can cheese to use either [Amazon S3][] or [Cloudinary][] as service for [ActiveStorage][].
 * Finally, you can choose to create a Github repository for you project and push it directly.
 
 ## How does it work?
@@ -124,3 +126,6 @@ If you want to contribute, please have a look to the issues in this repository a
 [devise]: https://github.com/plataformatec/devise
 [pundit]: https://github.com/varvet/pundit
 [haml]: http://haml.info/
+[activestorage]: https://guides.rubyonrails.org/active_storage_overview.html
+[amazon_s3]: https://aws.amazon.com/s3
+[cloudinary]: https://github.com/0sc/activestorage-cloudinary-service
