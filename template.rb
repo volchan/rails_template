@@ -111,8 +111,8 @@ def add_aws
 end
 
 def add_cloudinary
-  insert_into_file 'Gemfile', "gem 'cloudinary', require: false\n", before: /'country_select'\n/
-  insert_into_file 'Gemfile', "gem 'activestorage-cloudinary-service'\n", before: /'autoprefixer-rails'\n/
+  insert_into_file 'Gemfile', "gem 'cloudinary', require: false\n", before: "  gem 'country_select'\n"
+  insert_into_file 'Gemfile', "gem 'activestorage-cloudinary-service'\n", before: "  gem 'autoprefixer-rails'\n"
 end
 
 def initial_commit
