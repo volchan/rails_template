@@ -83,15 +83,19 @@ def clean_gemfile
 end
 
 def ask_optional_gems
-  @pundit = yes?('Do you want to manage authorizations with Pundit? (y/n)', :blue)
-  @haml = yes?('Do you want to use Haml instead of ERB? (y/n)', :blue)
-  @storage = yes?('Do you want to use ActiveStorage?(y/n)', :blue)
-  @github = yes?('Do you want to push your project to Github? (y/n)', :blue)
+  @pundit = yes?('Do you want to manage authorizations with Pundit? (y/n)', :green)
+  @haml = yes?('Do you want to use Haml instead of ERB? (y/n)', :green)
+  @storage = yes?('Do you want to use ActiveStorage? (y/n)', :green)
+  @aws = yes?('Do you want to use amazon S3 with ActiveStorage? (y/n)', :green) if @storage
+  @cloudinary = yes?('Do you want to use cloudinary with ActiveStorage? (y/n)', :green) unless @aws
+  @github = yes?('Do you want to push your project to Github? (y/n)', :green)
 end
 
 def add_optional_gems
   add_pundit if @pundit
   add_haml if @haml
+  add_aws if @aws
+  add_cloudinary if @cloudinary
 end
 
 def add_pundit
@@ -101,6 +105,15 @@ end
 def add_haml
   insert_into_file 'Gemfile', "gem 'haml'\n", after: /'font-awesome-sass', '~> 5.3.1'\n/
   insert_into_file 'Gemfile', "gem 'haml-rails', '~> 1.0'\n", after: /'haml'\n/
+end
+
+def add_aws
+  insert_into_file 'Gemfile', "gem 'aws-sdk-s3'\n", after: /'autoprefixer-rails'\n/
+end
+
+def add_cloudinary
+  insert_into_file 'Gemfile', "gem 'cloudinary', require: false\n", before: /'country_select'\n/
+  insert_into_file 'Gemfile', "gem 'activestorage-cloudinary-service'\n", before: /'autoprefixer-rails'\n/
 end
 
 def initial_commit
