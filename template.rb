@@ -139,10 +139,11 @@ def setup_brakeman
 end
 
 def setup_devise
-  copy_file 'config/routes.rb', force: true
+  remove_file 'config/routes.rb'
+  copy_file 'config/routes.rb'
   run 'rails g devise:install'
   run 'rails g devise:i18n:views'
-  insert_into_file 'config/routes.rb', before: "  scope '(:locale)', locale: /fr/ do" do
+  insert_into_file 'config/routes.rb', before: '  devise_for :users' do
     <<-RUBY
   require 'sidekiq/web'
   require 'sidekiq-status/web'
