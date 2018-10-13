@@ -219,7 +219,6 @@ def push_github
   run 'hub create'
   run 'git push origin master'
   run 'git push origin develop'
-  run 'hub browse'
 end
 
 def setup_overcommit
