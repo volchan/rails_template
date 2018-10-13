@@ -236,10 +236,10 @@ def setup_active_storage
 end
 
 def aws_config
-  gsub_file 'README', /config.active_storage.service = :local/, 'config.active_storage.service = :amazon'
+  gsub_file 'config/environments/production.rb', /config.active_storage.service = :local/, 'config.active_storage.service = :amazon'
   insert_into_file 'config/storage.yml', after: /  root: <%= Rails.root.join("storage") %>/ do
     <<~YAML
-    
+
       amazon:
         service: S3
         access_key_id: <%= 'Your amazon S3 access_key_id goes here!' %> # Put the actual key in your Environment viriables!!!!!!!
@@ -251,7 +251,7 @@ def aws_config
 end
 
 def cloudinary_config
-  gsub_file 'README', /config.active_storage.service = :local/, 'config.active_storage.service = :cloudinary'
+  gsub_file 'config/environments/production.rb', /config.active_storage.service = :local/, 'config.active_storage.service = :cloudinary'
   insert_into_file 'config/storage.yml', after: /  root: <%= Rails.root.join("storage") %>/ do
     <<~YAML
 
