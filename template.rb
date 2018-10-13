@@ -69,7 +69,14 @@ def add_template_repository_to_source_path
       'https://github.com/volchan/rails_template',
       tempdir
     ].map(&:shellescape).join(' ')
-    if (branch = __FILE__[%r{rails-template/(.+)/template.rb}, 1])
+
+    if (branch = __FILE__[%r{rails_template/(.+)/template.rb}, 1])
+      puts branch
+      puts branch
+      puts branch
+      puts branch
+      puts branch
+      puts branch
       Dir.chdir(tempdir) { git checkout: branch }
     end
   else
