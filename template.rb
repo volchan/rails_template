@@ -21,6 +21,7 @@ def apply_template!
     run 'bundle binstubs bundler --force'
     run 'rails db:create db:migrate'
     copy_file 'Rakefile', force: true
+    template 'README.md.tt', force: true
     initial_commit
     push_github if @github
   end
