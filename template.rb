@@ -19,7 +19,7 @@ def apply_template!
     js_setup
     setup_overcommit
     run 'bundle binstubs bundler --force'
-    run 'rails db:drop db:create db:migrate'
+    run 'rails db:create db:migrate'
     copy_file 'Rakefile', force: true
     initial_commit
     push_github if @github
@@ -93,7 +93,7 @@ def add_pundit
 end
 
 def add_haml
-  insert_into_file 'Gemfile', "gem 'haml'\n", after: /'font-awesome-sass', '~> 5.0.9'\n/
+  insert_into_file 'Gemfile', "gem 'haml'\n", after: /'font-awesome-sass', '~> 5.3.1'\n/
   insert_into_file 'Gemfile', "gem 'haml-rails', '~> 1.0'\n", after: /'haml'\n/
 end
 
@@ -141,7 +141,6 @@ end
 def setup_rubocop
   run 'bundle binstubs rubocop'
   copy_file '.rubocop.yml'
-  run 'rubocop'
 end
 
 def setup_brakeman
