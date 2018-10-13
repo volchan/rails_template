@@ -13,23 +13,19 @@ def mailer_config
   "config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }"
 end
 
-def sidekiq_routes
-  <<~RUBY
-    require 'sidekiq/web'
-    require 'sidekiq-status/web'
+copy_file 'config/initializers/i18n.rb'
+copy_file 'config/initializers/sidekiq.rb'
+copy_file 'config/initializers/redis.rb'
+copy_file 'config/sidekiq.yml'
+remove_file 'config/locales/en.yml'
+copy_file 'config/locales/defaults/en.yml'
+copy_file 'config/locales/models/en.yml'
+copy_file 'config/locales/views/en.yml'
+copy_file 'config/locales/defaults/fr.yml'
+copy_file 'config/locales/models/fr.yml'
+copy_file 'config/locales/views/fr.yml'
 
-    authenticate :user, lambda { |u| u.admin } do
-      mount Sidekiq::Web => '/sidekiq'
-    end
-  RUBY
-end
-
-copy_file 'config/sidekiq.yml' if @sidekiq
-copy_file 'config/initializers/redis.rb' if @sidekiq
-environment mailer_config, env: 'development' if @devise
+environment mailer_config, env: 'development'
 environment bullet_config, env: 'development'
-route "root to: 'pages#home'"
 
-if @sidekiq
-  insert_into_file 'config/routes.rb', sidekiq_routes, after: /draw do\n/
-end
+copy_file 'config/routes.rb', force: true
