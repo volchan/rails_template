@@ -85,7 +85,7 @@ When you launch a new rails app with the template, a few questions will be asked
 * If need authorization, [pundit][] can be added and configured too.
 * You can choose to use [Haml][] instead of `erb`.
 * You can choose to use [ActiveStorage][].
-* You can cheese to use either [AmazonS3][] or [Cloudinary][] as service for [ActiveStorage][].
+* You can choose to use either [AmazonS3][] or [Cloudinary][] as service for [ActiveStorage][].
 * Finally, you can choose to create a Github repository for you project and push it directly.
 
 ## How does it work?
