@@ -10,6 +10,7 @@ def apply_template!
   add_template_repository_to_source_path
   clean_gemfile
   ask_optional_gems
+  check_webpack
   add_optional_gems
   apply 'config/template.rb'
   apply 'app/template.rb'
@@ -34,12 +35,19 @@ def assert_minimum_rails_version
 
   # ask_to_continue(rails_version)
   puts "Please install rails #{RAILS_REQUIREMENT}!"
+  delete_app
+  exit 1
+end
+
+def delete_app
+  run "rm -rf ../#{app_name}"
 end
 
 def assert_pg
   return if options['database'] == 'postgresql'
 
   puts 'Please add "-d postgresql" as an option!'
+  delete_app
   exit 1
 end
 
@@ -83,12 +91,19 @@ def clean_gemfile
 end
 
 def ask_optional_gems
+  @no_webpack = yes?('Are you sure you don\'t want webpack? (y/n)', :red) unless options['webpack']
   @pundit = yes?('Do you want to manage authorizations with Pundit? (y/n)', :green)
   @haml = yes?('Do you want to use Haml instead of ERB? (y/n)', :green)
   @storage = yes?('Do you want to use ActiveStorage? (y/n)', :green)
   @aws = yes?('Do you want to use amazon S3 with ActiveStorage? (y/n)', :green) if @storage
   @cloudinary = yes?('Do you want to use cloudinary with ActiveStorage? (y/n)', :green) unless @aws
   @github = yes?('Do you want to push your project to Github? (y/n)', :green)
+end
+
+def check_webpack
+  return if @no_webpack
+  delete_app
+  exit 1
 end
 
 def add_optional_gems
