@@ -52,7 +52,7 @@ end
 #   return update_rails if %(u update).include?(res)
 #   return exit 1 if %(q quit exit).include?(res)
 #
-#   puts 'I did\'t understand your answer sorry.'
+#   puts 'I don\'t understand your answer sorry.'
 #   ask_to_continue
 # end
 #
