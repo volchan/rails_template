@@ -91,7 +91,7 @@ def clean_gemfile
 end
 
 def ask_optional_gems
-  @no_webpack = yes?('Are you sure you don\'t want webpack? (y/n)') unless options['webpack']
+  @no_webpack = yes?('Are you sure you don\'t want webpack? (y/n)', :red) unless options['webpack']
   @pundit = yes?('Do you want to manage authorizations with Pundit? (y/n)', :green)
   @haml = yes?('Do you want to use Haml instead of ERB? (y/n)', :green)
   @storage = yes?('Do you want to use ActiveStorage? (y/n)', :green)
@@ -101,8 +101,9 @@ def ask_optional_gems
 end
 
 def check_webpack
+  return if @no_webpack
   delete_app
-  exit 1 unless @no_webpack
+  exit 1
 end
 
 def add_optional_gems
