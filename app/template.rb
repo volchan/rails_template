@@ -18,3 +18,7 @@ insert_into_file(
   "  skip_before_action :authenticate_user!, only: %I[home]\n",
   after: "class PagesController < ApplicationController\n"
 )
+
+if @no_webpack && option['webpack'].nil?
+  gsub_file 'app/views/layouts/application.html.erb', "    <%= javascript_pack_tag 'application' %>", ''
+end
