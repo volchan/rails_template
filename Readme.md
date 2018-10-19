@@ -4,7 +4,7 @@
 
 This is the rails template I used for my Rails 5.2 projects as a freelance developer. Its goal is to allow to begin new rails application easily, with a modern and efficient configuration and with good set of defaults. The project is still very much a work in progress. So do not expect it to be 100% bug free. [Contributions][], ideas and help are really welcome.
 
-This project is inspired by the template developed by Matt Brictson. Have a look [here][] to compare both.
+This project is inspired by the template developed by [Damien Le Thiec](https://github.com/damienlethiec). Have a look [here][] to compare both.
 
 ## Requirements
 
@@ -103,7 +103,7 @@ Rails generators are very lightly documented; what you’ll find is that most of
 If you want to contribute, please have a look to the issues in this repository and pick one you are interested in. You can then clone the project and submit a pull request. We also happily welcome new idea and, of course, bug reports.
 
 [thor]: https://github.com/erikhuda/thor
-[here]: https://github.com/mattbrictson/rails-template
+[here]: https://github.com/damienlethiec/modern-rails-template
 [contributions]: https://github.com/volchan/rails_template#contributing
 [procfile]: https://devcenter.heroku.com/articles/procfile
 [i18n]: http://guides.rubyonrails.org/i18n.html
