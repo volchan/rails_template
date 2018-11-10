@@ -101,7 +101,7 @@ def ask_optional_gems
 end
 
 def check_webpack
-  return if @no_webpack
+  return if @no_webpack || options['webpack']
   delete_app
   exit 1
 end
