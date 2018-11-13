@@ -96,7 +96,7 @@ def ask_optional_gems
   @haml = yes?('Do you want to use Haml instead of ERB? (y/n)', :green)
   @storage = yes?('Do you want to use ActiveStorage? (y/n)', :green)
   @aws = yes?('Do you want to use amazon S3 with ActiveStorage? (y/n)', :green) if @storage
-  @cloudinary = yes?('Do you want to use cloudinary with ActiveStorage? (y/n)', :green) unless @aws
+  @cloudinary = yes?('Do you want to use cloudinary with ActiveStorage? (y/n)', :green) if @storage && !@aws
   @github = yes?('Do you want to push your project to Github? (y/n)', :green)
 end
 
